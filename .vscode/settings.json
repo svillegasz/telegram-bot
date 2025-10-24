@@ -1,0 +1,9 @@
+{
+  "python.defaultInterpreterPath": "/Users/svillegasz/Library/Caches/pypoetry/virtualenvs/telegram-bot-rOgRxyQo-py3.13/bin/python",
+  "python.analysis.extraPaths": [
+    "/Users/svillegasz/Library/Caches/pypoetry/virtualenvs/telegram-bot-rOgRxyQo-py3.13/lib/python3.13/site-packages"
+  ],
+  "python.analysis.typeCheckingMode": "basic",
+  "python.languageServer": "Pylance"
+}
+
