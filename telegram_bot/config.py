@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import os
+import uuid
 from dataclasses import dataclass
 
 # Constants
 DEFAULT_LOCATION = 'us-central1'
-DEFAULT_PORT = 8443
+DEFAULT_PORT = 8080
 DEFAULT_MODE = 'polling'
 TERMINATE_KEYWORD = 'TERMINATE'
 TYPING_ACTION = 'typing'
@@ -21,6 +22,7 @@ class BotConfig:
     mode: str
     webhook_url: str
     port: int
+    webhook_path: str
 
 
 @dataclass
@@ -51,12 +53,14 @@ def load_bot_config() -> BotConfig:
     mode = os.getenv('BOT_MODE', DEFAULT_MODE).lower()
     webhook_url = os.getenv('WEBHOOK_URL', '')
     port = int(os.getenv('PORT', str(DEFAULT_PORT)))
+    webhook_path = os.getenv('WEBHOOK_PATH', str(uuid.uuid4()))
 
     return BotConfig(
         token=token,
         mode=mode,
         webhook_url=webhook_url,
         port=port,
+        webhook_path=webhook_path,
     )
 
 

@@ -1,0 +1,78 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+tests/
+*.test
+
+# Documentation
+*.md
+docs/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# Scripts (if not needed in container)
+scripts/
+
+# Logs
+*.log
+logs/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+.cache/
+
+# Google Cloud credentials (never include in image)
+*.json
+credentials/
+service-account*.json
+gcloud-service-key.json
+
+# Other
+LICENSE
+README.md
+.editorconfig
+

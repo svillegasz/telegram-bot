@@ -197,14 +197,14 @@ test = ["pytest"]
 
 [[package]]
 name = "google-api-core"
-version = "2.28.0"
+version = "2.28.1"
 description = "Google API client core library"
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "google_api_core-2.28.0-py3-none-any.whl", hash = "sha256:b4362b0e2e6bc06037cfb0e2b28e2fe0c3f9d760dc311f314d5fb373768c7387"},
-    {file = "google_api_core-2.28.0.tar.gz", hash = "sha256:4743b7d45fe8c0930e59928b1bade287242910f30b06ff9b22f139a3e33271b8"},
+    {file = "google_api_core-2.28.1-py3-none-any.whl", hash = "sha256:4021b0f8ceb77a6fb4de6fde4502cecab45062e66ff4f2895169e0b35bc9466c"},
+    {file = "google_api_core-2.28.1.tar.gz", hash = "sha256:2b405df02d68e68ce0fbc138559e6036559e685159d148ae5861013dc201baf8"},
 ]
 
 [package.dependencies]
@@ -1036,14 +1036,14 @@ six = ">=1.5"
 
 [[package]]
 name = "python-dotenv"
-version = "1.1.1"
+version = "1.2.1"
 description = "Read key-value pairs from a .env file and set them as environment variables"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "python_dotenv-1.1.1-py3-none-any.whl", hash = "sha256:31f23644fe2602f88ff55e1f5c79ba497e01224ee7737937930c448e4d0e24dc"},
-    {file = "python_dotenv-1.1.1.tar.gz", hash = "sha256:a8a6399716257f45be6a007360200409fce5cda2661e3dec71d23dc15f6189ab"},
+    {file = "python_dotenv-1.2.1-py3-none-any.whl", hash = "sha256:b81ee9561e9ca4004139c6cbba3a238c32b03e4894671e181b671e8cb8425d61"},
+    {file = "python_dotenv-1.2.1.tar.gz", hash = "sha256:42667e897e16ab0d66954af0e60a9caa94f0fd4ecf3aaf6d2d260eec1aa36ad6"},
 ]
 
 [package.extras]
@@ -1374,5 +1374,5 @@ files = [
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.13"
-content-hash = "c9d954e6483a4b79c348fafc7ad5f8c318545c5f9b82cf25f6e34172122ebeba"
+python-versions = "^3.13"
+content-hash = "42899eb6722cdb27e922d37f7ccc437da9d6c668c39be3bffebe107c88134230"

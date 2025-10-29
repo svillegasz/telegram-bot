@@ -5,6 +5,7 @@ This is the main entry point for the bot application.
 
 from __future__ import annotations
 
+import os
 import logging
 from typing import Any
 
@@ -31,30 +32,17 @@ def run_webhook_mode(
     application: Any,
     config: BotConfig,
 ) -> None:
-    """Run bot in webhook mode.
-
-    Args:
-        application: Telegram application instance.
-        config: Bot configuration.
-
-    Raises:
-        ValueError: If webhook URL is not configured.
     """
-    if not config.webhook_url:
-        raise ValueError(
-            "WEBHOOK_URL is required when BOT_MODE=webhook. "
-            "Please add it to your .env file."
-        )
-
-    logger.info("Starting bot in WEBHOOK mode")
-    logger.info(f"Webhook URL: {config.webhook_url}/webhook")
-    logger.info(f"Port: {config.port}")
-
+    Start the built-in webhook server provided by python-telegram-bot.
+    Application.run_webhook will create an aiohttp/tornado server (depending on extras).
+    """
+    port = int(os.environ.get("PORT", "8080"))
+    listen = "0.0.0.0"
+    # run_webhook will start the HTTP server and set the webhook with Telegram API if webhook_url provided.
     application.run_webhook(
-        listen="0.0.0.0",
-        port=config.port,
-        url_path="webhook",
-        webhook_url=f"{config.webhook_url}/webhook",
+        listen=listen,
+        port=port,
+        webhook_url=config.webhook_url,
     )
 
 
