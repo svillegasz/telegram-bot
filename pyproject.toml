@@ -8,8 +8,10 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "python-telegram-bot (>=22.5,<23.0)",
-    "python-dotenv>=1.0.0"
+    "python-telegram-bot[webhooks] (>=22.5,<23.0)",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "google-cloud-aiplatform==1.110.0"
 ]
 
 

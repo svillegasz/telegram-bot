@@ -1,61 +1,98 @@
+"""Telegram bot integration with Google Vertex AI Agent Engine.
+
+This is the main entry point for the bot application.
+"""
+
+from __future__ import annotations
+
 import logging
-import os
+from typing import Any
+
 from dotenv import load_dotenv
-from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters
+from telegram.ext import ApplicationBuilder
+
+from agent import agent_manager
+from config import BotConfig, load_bot_config, load_vertex_ai_config
+from handlers import setup_handlers
 
 # Load environment variables from .env file
 load_dotenv()
 
+# Configure logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
+    level=logging.INFO,
 )
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_chat and update.effective_user:
-        user = update.effective_user
-        # Use first name, and add last name if available
-        full_name = user.first_name
-        if user.last_name:
-            full_name += f" {user.last_name}"
-        
-        greeting = f"Hello {full_name}! 👋 I'm a bot, please talk to me!"
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=greeting)
+logger = logging.getLogger(__name__)
+
+
+def run_webhook_mode(
+    application: Any,
+    config: BotConfig,
+) -> None:
+    """Run bot in webhook mode.
+
+    Args:
+        application: Telegram application instance.
+        config: Bot configuration.
+
+    Raises:
+        ValueError: If webhook URL is not configured.
+    """
+    if not config.webhook_url:
+        raise ValueError(
+            "WEBHOOK_URL is required when BOT_MODE=webhook. "
+            "Please add it to your .env file."
+        )
+
+    logger.info("Starting bot in WEBHOOK mode")
+    logger.info(f"Webhook URL: {config.webhook_url}/webhook")
+    logger.info(f"Port: {config.port}")
+
+    application.run_webhook(
+        listen="0.0.0.0",
+        port=config.port,
+        url_path="webhook",
+        webhook_url=f"{config.webhook_url}/webhook",
+    )
+
+
+def run_polling_mode(application: Any) -> None:
+    """Run bot in polling mode.
+
+    Args:
+        application: Telegram application instance.
+    """
+    logger.info("Starting bot in POLLING mode (development)")
+    application.run_polling()
+
+
+def main() -> None:
+    """Main entry point for the bot."""
+    # Load configurations
+    bot_config = load_bot_config()
+    vertex_ai_config = load_vertex_ai_config()
+
+    # Initialize Vertex AI agent
+    try:
+        agent_manager.initialize(vertex_ai_config)
+    except Exception as e:
+        logger.error(f"Failed to initialize Vertex AI: {e}")
+        raise
+
+    # Build application
+    application = ApplicationBuilder().token(bot_config.token).build()
+
+    # Setup handlers
+    setup_handlers(application)
+
+    # Run in selected mode
+    if bot_config.mode == 'webhook':
+        run_webhook_mode(application, bot_config)
     else:
-        logging.error("No chat ID or user info found in update")
-
-
-async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_chat and update.message and update.message.text:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
-    else:
-        logging.error("No chat ID or message text found in update")
-
-
-async def unknown(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_chat:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I didn't understand that command.")
-    else:
-        logging.error("No chat ID found in update")
+        run_polling_mode(application)
 
 
 if __name__ == '__main__':
-    # Get token from environment variable
-    token = os.getenv('TELEGRAM_BOT_TOKEN')
-    
-    if not token:
-        raise ValueError("TELEGRAM_BOT_TOKEN not found in environment variables. Please create a .env file with your token.")
-    
-    application = ApplicationBuilder().token(token).build()
-    
-    start_handler = CommandHandler('start', start)
-    application.add_handler(start_handler)
-    
-    echo_handler = MessageHandler(filters.TEXT & ~filters.COMMAND, echo)
-    application.add_handler(echo_handler)
-    
-    unknown_handler = MessageHandler(filters.COMMAND, unknown)
-    application.add_handler(unknown_handler)
-    
-    application.run_polling()
+    main()
